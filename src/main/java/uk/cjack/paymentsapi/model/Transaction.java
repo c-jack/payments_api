@@ -8,9 +8,10 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import uk.cjack.paymentsapi.provider.PaymentProvider;
+import uk.cjack.paymentsapi.provider.PaymentProcessor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "transactions")
@@ -29,7 +30,7 @@ public class Transaction
     private LocalDate paymentDate;
 
     @Field
-    private PaymentProvider paymentProvider;
+    private PaymentProcessor paymentProcessor;
 
     @Field
     private Status status;
@@ -50,7 +51,7 @@ public class Transaction
     private long amount;
 
     @Field
-    private List<String> audit;
+    private List<String> audit = new ArrayList<>();
 
 
     /**
@@ -66,6 +67,8 @@ public class Transaction
      *
      * @param id              the ID of the Transaction document
      * @param _class          the class name
+     * @param paymentProcessor the processor of the payment
+     * @param paymentDate      the date of the payment
      * @param status          the {@link Status} of the payment
      * @param transactionType the {@link Type} of the transaction
      * @param customerRef     the reference to the customer making the transaction
@@ -77,7 +80,7 @@ public class Transaction
     @PersistenceConstructor
     public Transaction(final String id,
                        final String _class,
-                       final PaymentProvider paymentProvider,
+                       final PaymentProcessor paymentProcessor,
                        final LocalDate paymentDate,
                        final Status status,
                        final Type transactionType,
@@ -89,7 +92,7 @@ public class Transaction
     {
         this.id = id;
         this._class = _class;
-        this.paymentProvider = paymentProvider;
+        this.paymentProcessor = paymentProcessor;
         this.paymentDate = paymentDate;
         this.status = status;
         this.transactionType = transactionType;
@@ -103,16 +106,18 @@ public class Transaction
     /**
      * Constructor for creating a new Transaction
      *
-     * @param status          the {@link Status} of the payment
-     * @param transactionType the {@link Type} of the transaction
-     * @param customerRef     the reference to the customer making the transaction
-     * @param productRef      the reference to the product the transaction is for
-     * @param card            the {@link PaymentCard} for the transaction
-     * @param amount          the amount of the transaction
-     * @param audit           any audit notes relating to the transaction
+     * @param paymentProcessor the processor of the payment
+     * @param paymentDate      the date of the payment
+     * @param status           the {@link Status} of the payment
+     * @param transactionType  the {@link Type} of the transaction
+     * @param customerRef      the reference to the customer making the transaction
+     * @param productRef       the reference to the product the transaction is for
+     * @param card             the {@link PaymentCard} for the transaction
+     * @param amount           the amount of the transaction
+     * @param audit            any audit notes relating to the transaction
      */
     @JsonCreator
-    public Transaction(final PaymentProvider paymentProvider,
+    public Transaction(final PaymentProcessor paymentProcessor,
                        final LocalDate paymentDate,
                        final Status status,
                        final Type transactionType,
@@ -122,7 +127,7 @@ public class Transaction
                        final long amount,
                        final List<String> audit)
     {
-        this.paymentProvider = paymentProvider;
+        this.paymentProcessor = paymentProcessor;
         this.paymentDate = paymentDate;
         this.status = status;
         this.transactionType = transactionType;
@@ -318,19 +323,19 @@ public class Transaction
      *
      * @return value of paymentProvider
      */
-    public PaymentProvider getPaymentProvider()
+    public PaymentProcessor getPaymentProcessor()
     {
-        return paymentProvider;
+        return paymentProcessor;
     }
 
     /**
-     * Sets paymentProvider
+     * Sets paymentProcessor
      *
-     * @param paymentProvider value of paymentProvider
+     * @param paymentProcessor value of paymentProcessor
      */
-    public void setPaymentProvider(final PaymentProvider paymentProvider)
+    public void setPaymentProcessor(final PaymentProcessor paymentProcessor)
     {
-        this.paymentProvider = paymentProvider;
+        this.paymentProcessor = paymentProcessor;
     }
 
     /**
@@ -340,15 +345,16 @@ public class Transaction
     {
         COMPLETE,
         PENDING,
-        FAILED
+        FAILED,
+        CANCELLED
     }
 
     /**
      * Payment Type
      */
-    enum Type
+    public enum Type
     {
         PROCESS,
-        CANCEL
+        REFUND
     }
 }

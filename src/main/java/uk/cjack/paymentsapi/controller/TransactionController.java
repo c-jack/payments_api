@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.cjack.paymentsapi.model.PaymentCard;
 import uk.cjack.paymentsapi.model.Transaction;
-import uk.cjack.paymentsapi.provider.PaymentProvider;
+import uk.cjack.paymentsapi.provider.PaymentProcessor;
 import uk.cjack.paymentsapi.repository.PaymentCardRepository;
-import uk.cjack.paymentsapi.repository.PaymentProviderRepository;
 import uk.cjack.paymentsapi.repository.TransactionRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +28,6 @@ public class TransactionController
 
     @Autowired
     PaymentCardRepository paymentCardRepository;
-
-    @Autowired
-    PaymentProviderRepository paymentProviderRepository;
 
     /**
      * Returns all transactions currently persisted
@@ -81,7 +78,7 @@ public class TransactionController
     {
         try
         {
-            final PaymentProvider paymentProvider = transaction.getPaymentProvider();
+            final PaymentProcessor paymentProcessor = transaction.getPaymentProcessor();
             final PaymentCard card = transaction.getCard();
             if (card.getId() == null)
             {
@@ -89,19 +86,13 @@ public class TransactionController
                 transaction.setCard(paymentCard);
             }
 
-            if (paymentProvider.getId() == null
-                    && paymentProvider.getProviderName() != null)
-            {
-                final Optional<PaymentProvider> providerName = paymentProviderRepository.findPaymentProviderByProviderName(paymentProvider.getProviderName());
-                if( providerName.isPresent())
-                {
-                    transaction.setPaymentProvider(providerName.get());
-                }
+            // check processor implementation and respond if invalid?
 
-            }
-            final Transaction savedCard = transactionRepository.save(transaction);
-            return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
-        } catch (Exception e)
+            // set/override status to 'pending'
+            transaction.setStatus(Transaction.Status.PENDING);
+            final Transaction savedTransaction = transactionRepository.save(transaction);
+            return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
+        } catch (final Exception e)
         {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -114,13 +105,56 @@ public class TransactionController
      * @return request response
      */
     @DeleteMapping("/transaction/{id}")
-    public ResponseEntity<HttpStatus> cancelTransaction(@PathVariable("id") final String id)
+    public ResponseEntity<Transaction> cancelTransaction(@PathVariable("id") final String id)
     {
         try
         {
-            //TODO
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e)
+            final Transaction result;
+            Optional<Transaction> byId = transactionRepository.findById(id);
+
+            if (byId.isPresent())
+            {
+                final Transaction transaction = byId.get();
+
+                if (transaction.getStatus().equals(Transaction.Status.COMPLETE))
+                {
+                    // refund - cancel the existing
+                    transaction.setStatus(Transaction.Status.CANCELLED);
+
+                    // build a new refund transaction
+                    final Transaction refund = new Transaction();
+                    refund.setTransactionType(Transaction.Type.REFUND);
+                    refund.setPaymentProcessor(transaction.getPaymentProcessor());
+                    refund.setCard(transaction.getCard());
+                    refund.setStatus(Transaction.Status.PENDING);
+                    refund.setAmount(transaction.getAmount());
+                    refund.setCustomerRef(transaction.getCustomerRef());
+                    refund.setPaymentDate(LocalDate.now());
+                    refund.setProductRef(transaction.getProductRef());
+                    refund.getAudit().add("Refund for " + transaction.getId());
+
+                    // save the refund
+                    result = transactionRepository.save(refund);
+
+                    // save the cancelled one
+                    transactionRepository.save(transaction);
+
+                } else if (transaction.getStatus().equals(Transaction.Status.PENDING))
+                {
+                    // No need to refund - just cancel
+                    transaction.setStatus(Transaction.Status.CANCELLED);
+                    result = transactionRepository.save(transaction);
+                } else
+                {
+                    result = transaction;
+                }
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
+
+            // TODO exception?
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (final Exception e)
         {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

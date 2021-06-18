@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uk.cjack.paymentsapi.model.Transaction;
-import uk.cjack.paymentsapi.provider.PaymentProvider;
+import uk.cjack.paymentsapi.provider.PaymentProcessor;
 import uk.cjack.paymentsapi.repository.TransactionRepository;
 
 import java.util.List;
 
 /**
  * Transaction Processor Service
- *
+ * <p>
  * Processes transactions
  */
 @Component
@@ -29,10 +29,17 @@ public class TransactionProcessorService
     {
         final List<Transaction> pendingTransactions = transactionRepository.findAllByStatus(Transaction.Status.PENDING);
 
-        for( final Transaction transaction : pendingTransactions )
+        for (final Transaction transaction : pendingTransactions)
         {
-            final PaymentProvider paymentProvider = transaction.getPaymentProvider();
-            paymentProvider.processTransaction();
+            try
+            {
+                final PaymentProcessor paymentProcessor = transaction.getPaymentProcessor();
+                paymentProcessor.processTransaction(transaction);
+
+            } catch (final Exception e)
+            {
+                // handle exception
+            }
         }
     }
 
