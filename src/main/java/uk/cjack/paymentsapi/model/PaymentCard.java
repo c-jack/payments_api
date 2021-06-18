@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class PaymentCard {
 
     @Id
-    private String _id;
+    private String id;
 
     @Field
     @JsonProperty("type")
@@ -51,7 +51,7 @@ public class PaymentCard {
     /**
      * Constructor for the Persistence flow
      *
-     * @param _id        the ID of the PaymentCard document
+     * @param id        the ID of the PaymentCard document
      * @param _class     the class name
      * @param address    the address details {@link Address}
      * @param brand      the {@link Brand} of the card
@@ -60,14 +60,14 @@ public class PaymentCard {
      * @param attributes any additional fields
      */
     @PersistenceConstructor
-    public PaymentCard(final String _id,
+    public PaymentCard(final String id,
                        final String _class,
                        final Address address,
                        final Brand brand,
                        final String last4,
                        final ExpiryDate expiryDate,
                        final Map<String, String> attributes) {
-        this._id = _id;
+        this.id = id;
         this._class = _class;
         this.address = address;
         this.brand = brand;
@@ -116,7 +116,7 @@ public class PaymentCard {
      * @return Id of the object
      */
     public String getId() {
-        return _id;
+        return id;
     }
 
     /**
