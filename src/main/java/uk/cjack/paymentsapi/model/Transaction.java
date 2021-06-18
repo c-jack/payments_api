@@ -336,7 +336,7 @@ public class Transaction
     /**
      * Payment Status
      */
-    enum Status
+    public enum Status
     {
         COMPLETE,
         PENDING,

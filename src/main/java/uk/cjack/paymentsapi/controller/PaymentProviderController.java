@@ -41,7 +41,7 @@ public class PaymentProviderController
      * @param id the PaymentProvider ID value to look up
      * @return matching record (if exists)
      */
-    @GetMapping("/payment/{id}")
+    @GetMapping("/provider/{id}")
     public ResponseEntity<PaymentProvider> getPaymentProviderById(@PathVariable("id") final String id) {
         final Optional<PaymentProvider> byId = paymentProviderRepository.findById(id);
         if (byId.isPresent()) {
@@ -74,14 +74,14 @@ public class PaymentProviderController
      * @param paymentProvider the details of the card to update
      * @return updated payment card object
      */
-    @PutMapping("/payment/{id}")
+    @PutMapping("/provider/{id}")
     public ResponseEntity<PaymentProvider> updatePaymentProvider(@PathVariable("id") String id, @RequestBody PaymentProvider paymentProvider) {
         Optional<PaymentProvider> existingProvider = paymentProviderRepository.findById(id);
 
         if (existingProvider.isPresent()) {
             PaymentProvider existingPaymentProvider = existingProvider.get();
             existingPaymentProvider.setProviderName(paymentProvider.getProviderName());
-            existingPaymentProvider.setWsdl(paymentProvider.getWsdl());
+            existingPaymentProvider.setEndpoint(paymentProvider.getEndpoint());
             existingPaymentProvider.setCredentials(paymentProvider.getCredentials());
             existingPaymentProvider.setSchema(paymentProvider.getSchema());
             return new ResponseEntity<>(paymentProviderRepository.save(existingPaymentProvider), HttpStatus.OK);
@@ -96,7 +96,7 @@ public class PaymentProviderController
      * @param id the ID to look up
      * @return request response
      */
-    @DeleteMapping("/payment/{id}")
+    @DeleteMapping("/provider/{id}")
     public ResponseEntity<HttpStatus> deletePaymentProvider(@PathVariable("id") final String id) {
         try {
             paymentProviderRepository.deleteById(id);

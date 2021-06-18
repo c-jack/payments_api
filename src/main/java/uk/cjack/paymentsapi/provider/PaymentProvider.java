@@ -6,7 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Document(collection = "paymentCards")
@@ -29,7 +31,7 @@ public class PaymentProvider {
      * the WSDL/Endpoint for the payment provider
      */
     @Field
-    private String wsdl;
+    private String endpoint;
 
     /**
      * credentials required by the payment provider
@@ -55,14 +57,14 @@ public class PaymentProvider {
     public PaymentProvider(final String id,
                            final String _class,
                            final String providerName,
-                           final String wsdl,
+                           final String endpoint,
                            final Map<String, String> credentials,
                            final Map<String, String> schema)
     {
         this.id = id;
         this._class = _class;
         this.providerName = providerName;
-        this.wsdl = wsdl;
+        this.endpoint = endpoint;
         this.credentials = credentials;
         this.schema = schema;
     }
@@ -72,12 +74,12 @@ public class PaymentProvider {
      */
     @JsonCreator
     public PaymentProvider(final String providerName,
-                           final String wsdl,
+                           final String endpoint,
                            final Map<String, String> credentials,
                            final Map<String, String> schema)
     {
         this.providerName = providerName;
-        this.wsdl = wsdl;
+        this.endpoint = endpoint;
         this.credentials = credentials;
         this.schema = schema;
     }
@@ -127,19 +129,19 @@ public class PaymentProvider {
      *
      * @return value of wsdl
      */
-    public String getWsdl()
+    public String getEndpoint()
     {
-        return wsdl;
+        return endpoint;
     }
 
     /**
      * Sets wsdl
      *
-     * @param wsdl value of wsdl
+     * @param endpoint value of wsdl
      */
-    public void setWsdl(final String wsdl)
+    public void setEndpoint(final String endpoint)
     {
-        this.wsdl = wsdl;
+        this.endpoint = endpoint;
     }
 
     /**
@@ -180,5 +182,18 @@ public class PaymentProvider {
     public void setSchema(final Map<String, String> schema)
     {
         this.schema = schema;
+    }
+
+
+    /**
+     * Process the transaction
+     */
+    public void processTransaction()
+    {
+        RestTemplate restTemplate = new RestTemplate();
+
+        List<Object> payload = null;
+
+        restTemplate.getForObject( this.endpoint, null, payload);
     }
 }
