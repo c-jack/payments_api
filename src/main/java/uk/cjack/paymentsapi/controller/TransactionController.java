@@ -99,12 +99,13 @@ public class TransactionController
     }
 
     /**
-     * Cancels a transaction with the matching ID
+     * Cancels a transaction with the matching ID.
+     * If the transaction is 'complete', a refund will be processed.
      *
      * @param id the ID to look up
      * @return request response
      */
-    @DeleteMapping("/transaction/{id}")
+    @GetMapping("/transaction/refund/{id}")
     public ResponseEntity<Transaction> cancelTransaction(@PathVariable("id") final String id)
     {
         try

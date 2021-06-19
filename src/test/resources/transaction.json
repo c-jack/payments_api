@@ -1,0 +1,32 @@
+{
+  "paymentDate" : "2021-01-01",
+  "status" : "PENDING",
+  "transactionType" : "PURCHASE",
+  "customerRef" : "cust123",
+  "productRef" : "prod123",
+  "amount" : "123456",
+  "card" : {
+    "address": {
+      "city": "Chippenham",
+      "country": "England",
+      "line1": "1 High Street",
+      "line2": null,
+      "state": "Wiltshire",
+      "zip": "SN15 1AB",
+      "attributes": {
+        "misc": "banana"
+      }
+    },
+    "brand": "AMEX",
+    "last4": "1234",
+    "expiryDate": {
+      "month": "01",
+      "year": "2022"
+    },
+    "attributes": {
+      "cvc" : "123"
+    }
+  },
+  "audit" : ["test"]
+
+}

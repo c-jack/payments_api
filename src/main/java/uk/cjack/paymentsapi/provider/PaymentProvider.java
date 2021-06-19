@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Payment Provider
- *
+ * <p>
  * Stores the generic/common attributes of a payment provider implementation
  */
 public class PaymentProvider
@@ -83,12 +83,13 @@ public class PaymentProvider
      * @param payload
      */
     public <T> T processPendingTransaction(final Class<?> responseType,
-                                   final Map<String, Object> payload)
+                                           final Map<String, Object> payload)
     {
         RestTemplate restTemplate = new RestTemplate();
 
         return (T) restTemplate.getForObject(this.endpoint + PROCESS, responseType, payload);
     }
+
     /**
      * Cancel the transaction
      *

@@ -354,7 +354,7 @@ public class Transaction
      */
     public enum Type
     {
-        PROCESS,
+        PURCHASE,
         REFUND
     }
 }

@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "9a9cf210-2e92-41da-ad55-17bf14d63b09",
+		"name": "Payment API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create PaymentMethod",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": {\n        \"city\": \"Chippenham\",\n        \"country\": \"England\",\n        \"line1\": \"1 High Street\",\n        \"line2\": null,\n        \"state\": \"Wiltshire\",\n        \"zip\": \"SN15 1AB\",\n        \"attributes\": {\n            \"misc\": \"banana\"\n        }\n    },\n    \"brand\": \"AMEX\",\n    \"last4\": \"1234\",\n    \"expiryDate\": {\n        \"month\": \"01\",\n        \"year\": \"2022\"\n    },\n    \"attributes\": {\n        \"cvc\" : \"123\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/payment",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllPaymentMethods",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/payment",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletePaymentMethod",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/payment/60cbb1aef3c4c70d6caba3a7",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"payment",
+						"60cbb1aef3c4c70d6caba3a7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": {\n        \"city\": \"Chippenham\",\n        \"country\": \"England\",\n        \"line1\": \"1 High Street\",\n        \"line2\": null,\n        \"state\": \"Wiltshire\",\n        \"zip\": \"SN15 1AB\",\n        \"attributes\": {\n            \"misc\": \"banana\"\n        }\n    },\n    \"brand\": \"AMEX\",\n    \"last4\": \"1234\",\n    \"expiryDate\": {\n        \"month\": \"01\",\n        \"year\": \"2022\"\n    },\n    \"attributes\": {\n        \"cvc\" : \"123\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/transaction",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refund Transaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/api/transaction/refund/60cdf32ab643d94449905c38",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"api",
+						"transaction",
+						"refund",
+						"60cdf32ab643d94449905c38"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllTransactions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9080/api/transaction",
+					"host": [
+						"localhost"
+					],
+					"port": "9080",
+					"path": [
+						"api",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -7,11 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Address Object
- *
- * Used to define an address used on the payment card
+ * Address
+ * <p>
+ * Used to define an address used on the payment card.
+ * The fields have been left as the 'internationalised' names, as most of the payment APIs use the
+ * more americanised names, such as 'zip'
  */
-public class Address {
+public class Address
+{
     private String city;
     private String country;
     private String line1;
@@ -20,11 +23,30 @@ public class Address {
     private String zip;
     private Map<String, String> attributes;
 
-    public Address() {
+    public Address()
+    {
     }
 
+    /**
+     * Constructor for the Persistence flow
+     *
+     * @param city       the city/town of the address
+     * @param country    the country of the address
+     * @param line1      address line 1
+     * @param line2      address line 2
+     * @param state      the state/county
+     * @param zip        the postcode/zip
+     * @param attributes any additional metadata for the address (for supporting additional schema data for integration of APIs)
+     */
     @PersistenceConstructor
-    public Address(String city, String country, String line1, String line2, String state, String zip, Map<String, String> attributes) {
+    public Address(final String city,
+                   final String country,
+                   final String line1,
+                   final String line2,
+                   final String state,
+                   final String zip,
+                   final Map<String, String> attributes)
+    {
         this.city = city;
         this.country = country;
         this.line1 = line1;
@@ -34,7 +56,14 @@ public class Address {
         this.attributes = attributes;
     }
 
-    public Address(final Map<String, String> addressMap) {
+
+    /**
+     * Constructor to support {@link Map} argument for creating an {@link Address}
+     *
+     * @param addressMap a Map of address String values
+     */
+    public Address(final Map<String, String> addressMap)
+    {
 
         Map<String, String> values = new HashMap<>(addressMap);
         this.city = addressMap.get("city");
@@ -49,66 +78,143 @@ public class Address {
         attributes = new HashMap<>(values);
     }
 
-    public String getCity() {
+    /**
+     * Gets city
+     *
+     * @return value of city
+     */
+    public String getCity()
+    {
         return city;
     }
 
-    public Address setCity(String city) {
+    /**
+     * Sets city
+     *
+     * @param city value of city
+     */
+    public void setCity(final String city)
+    {
         this.city = city;
-        return this;
     }
 
-    public String getCountry() {
+    /**
+     * Gets country
+     *
+     * @return value of country
+     */
+    public String getCountry()
+    {
         return country;
     }
 
-    public Address setCountry(String country) {
+    /**
+     * Sets country
+     *
+     * @param country value of country
+     */
+    public void setCountry(final String country)
+    {
         this.country = country;
-        return this;
     }
 
-    public String getLine1() {
+    /**
+     * Gets line1
+     *
+     * @return value of line1
+     */
+    public String getLine1()
+    {
         return line1;
     }
 
-    public Address setLine1(String line1) {
+    /**
+     * Sets line1
+     *
+     * @param line1 value of line1
+     */
+    public void setLine1(final String line1)
+    {
         this.line1 = line1;
-        return this;
     }
 
-    public String getLine2() {
+    /**
+     * Gets line2
+     *
+     * @return value of line2
+     */
+    public String getLine2()
+    {
         return line2;
     }
 
-    public Address setLine2(String line2) {
+    /**
+     * Sets line2
+     *
+     * @param line2 value of line2
+     */
+    public void setLine2(final String line2)
+    {
         this.line2 = line2;
-        return this;
     }
 
-    public String getState() {
+    /**
+     * Gets state
+     *
+     * @return value of state
+     */
+    public String getState()
+    {
         return state;
     }
 
-    public Address setState(String state) {
+    /**
+     * Sets state
+     *
+     * @param state value of state
+     */
+    public void setState(final String state)
+    {
         this.state = state;
-        return this;
     }
 
-    public String getZip() {
+    /**
+     * Gets zip
+     *
+     * @return value of zip
+     */
+    public String getZip()
+    {
         return zip;
     }
 
-    public Address setZip(String zip) {
+    /**
+     * Sets zip
+     *
+     * @param zip value of zip
+     */
+    public void setZip(final String zip)
+    {
         this.zip = zip;
-        return this;
     }
 
-    public Map<String, String> getAttributes() {
+    /**
+     * Gets attributes
+     *
+     * @return value of attributes
+     */
+    public Map<String, String> getAttributes()
+    {
         return attributes;
     }
 
-    public Address setAttributes(Map<String, String> attributes) {
+    /**
+     * Sets attributes
+     *
+     * @param attributes value of attributes
+     */
+    public void setAttributes(final Map<String, String> attributes)
+    {
         this.attributes = attributes;
-        return this;
     }
 }

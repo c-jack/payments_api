@@ -31,7 +31,7 @@ public class StripePayment extends PaymentProvider implements PaymentProcessor
     {
         final String result;
 
-        if (transaction.getTransactionType() == Transaction.Type.PROCESS)
+        if (transaction.getTransactionType() == Transaction.Type.PURCHASE)
         {
             final Map<String, Object> schema = getProcessSchema(transaction);
             result = processPendingTransaction(String.class, schema);

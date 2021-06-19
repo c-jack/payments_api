@@ -75,10 +75,10 @@ class TransactionTest extends Specification {
         transaction.getTransactionType() == null
 
         when: "I set a value using the setter"
-        transaction.setTransactionType(Transaction.Type.PROCESS)
+        transaction.setTransactionType(Transaction.Type.PURCHASE)
 
         then: "the value is set as expected"
-        transaction.getTransactionType() == Transaction.Type.PROCESS
+        transaction.getTransactionType() == Transaction.Type.PURCHASE
     }
 
     /**
