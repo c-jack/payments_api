@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) Chris Jackson (github.com/c-jack) - All Rights Reserved
+ * Unauthorised copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * Written by Chris Jackson <chris@cjack.uk>,  2021.
+ */
+
 package uk.cjack.paymentsapi.controller;
 
 import org.junit.jupiter.api.Test;
