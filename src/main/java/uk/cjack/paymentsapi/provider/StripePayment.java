@@ -80,7 +80,7 @@ public class StripePayment extends PaymentProvider implements PaymentProcessor
         final PaymentCard card = transaction.getCard();
         paymentCard.put("address", card.getAddress());
         paymentCard.put("expiry", card.getExpiryDate());
-        paymentCard.put("laste", card.getLast4());
+        paymentCard.put("last4", card.getLast4());
         // etc
 
         schema.put("customer", transaction.getCustomerRef());
