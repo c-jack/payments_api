@@ -2,7 +2,7 @@
 
 June 2021 | Chris Jackson | [github/c-jack](http://www.github.com/c-jack)
 
-An example 'Payments' API, as based on the Crowdcube Payments Challenge.
+An example 'Payments' API
 
 
 
